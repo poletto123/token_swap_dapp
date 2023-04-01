@@ -1,4 +1,4 @@
-# token_swap
+# token_swap_dapp
 
 [DETAILS](#details)   
 [HOW TO RUN](#how-to-run)   
@@ -7,7 +7,7 @@
 
 - This is a Token Swap Dapp that allows for exchange between ETH and BananaToken, with a fixed price and immediate settlement (upon availability of funds)
 
-- Unit tests of contract made with Chai and Mocha
+- Smart contracts written in Solidity and Hardhat, unit tests written with Chai and Mocha
 
 - Contracts are deployed on the Goerli test network on the Ethereum blockchain
     - BananaToken.sol - https://goerli.etherscan.io/address/0xfcafA643eF33b1C388bA3aACe31D2899943A311B
