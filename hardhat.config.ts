@@ -9,6 +9,12 @@ const config: HardhatUserConfig = {
       chainId: 1337
     }
   },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./src/abis"
+  },
 
 };
 

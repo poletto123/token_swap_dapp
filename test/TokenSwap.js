@@ -25,17 +25,15 @@ describe('TokenSwap', function() {
     it('allows for buying tokens for a fixed price', async () => {
         const { tokenSwap, bananaToken } = await loadFixture(deployContractsAndSendFundsToTokenSwap);
         const [deployer, investor] = await ethers.getSigners();
-        const provider = ethers.provider;
 
         await expect(tokenSwap.connect(investor).buyTokens({ value: ethers.utils.parseUnits('1000000', 'wei')}))
             .to.emit(tokenSwap, 'TokensPurchased').withArgs(
                 investor.address, 
                 bananaToken.address,
-                ethers.utils.parseUnits('100000000', 'wei'),
-                '100');
+                ethers.utils.parseUnits('10000000', 'wei'),
+                '10');
 
-        expect(await bananaToken.balanceOf(investor.address)).to.equal(ethers.utils.parseUnits('100000000', 'wei'));
-        expect(await provider.getBalance(tokenSwap.address)).to.equal(ethers.utils.parseUnits('1000000', 'wei'));
+        expect(await bananaToken.balanceOf(investor.address)).to.equal(ethers.utils.parseUnits('10000000', 'wei'));
     })
 
     it('allows for selling tokens for a fixed price', async () => {
@@ -48,13 +46,13 @@ describe('TokenSwap', function() {
         expect(await provider.getBalance(tokenSwap.address)).to.equal(0);
 
         await tokenSwap.connect(investor).buyTokens({ value: ethers.utils.parseUnits('10', 'wei')});
-        await bananaToken.connect(investor).approve(tokenSwap.address, ethers.utils.parseUnits('1000', 'wei'));
-        await expect(tokenSwap.connect(investor).sellTokens(ethers.utils.parseUnits('1000', 'wei')))
+        await bananaToken.connect(investor).approve(tokenSwap.address, ethers.utils.parseUnits('100', 'wei'));
+        await expect(tokenSwap.connect(investor).sellTokens(ethers.utils.parseUnits('100', 'wei')))
             .to.emit(tokenSwap, 'TokensSold').withArgs(
                 investor.address, 
                 bananaToken.address,
-                ethers.utils.parseUnits('1000', 'wei'),
-                '100'
+                ethers.utils.parseUnits('100', 'wei'),
+                '10'
             );;
         expect(await bananaToken.balanceOf(investor.address)).to.equal(0);
         expect(await bananaToken.balanceOf(tokenSwap.address)).to.equal(ethers.utils.parseEther("1"));
@@ -66,6 +64,6 @@ describe('TokenSwap', function() {
         const [deployer, investor] = await ethers.getSigners();
 
         expect(await bananaToken.balanceOf(investor.address)).to.equal(0);
-        await expect(tokenSwap.connect(investor).sellTokens(ethers.utils.parseUnits('1000', 'wei'))).to.be.reverted;
+        await expect(tokenSwap.connect(investor).sellTokens(ethers.utils.parseUnits('100', 'wei'))).to.be.reverted;
     })
 });

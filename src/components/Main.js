@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
-import BananaToken from '../abis/BananaToken.json';
-import TokenSwap from '../abis/TokenSwap.json';
-import ethLogo from '../assets/ethLogo.png';
-import bananaLogo from '../assets/bananaToken.png';
+import BananaToken from '../abis/contracts/BananaToken.sol/BananaToken.json';
+import TokenSwap from '../abis/contracts/TokenSwap.sol/TokenSwap.json';
+import BuyForm from './BuyForm';
+import SellForm from './SellForm';
 
 const Main = ({ accounts }) => {
 
@@ -13,11 +13,11 @@ const Main = ({ accounts }) => {
     const [swapContract, setSwapContract] = useState({});
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
+    const [currentForm, setCurrentForm] = useState('buy');
 
-    const bananaTokenAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-    const tokenSwapAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
-    const tokenRate = 100;
-
+    const bananaTokenAddress = '0x809d550fca64d94Bd9F66E60752A544199cfAC3D';
+    const tokenSwapAddress = '0x4c5859f0F772848b2D91F1D83E2Fe57935348029';
+    const tokenRate = 10;
 
     useEffect(() => {
         async function loadBlockchainData() {
@@ -31,7 +31,7 @@ const Main = ({ accounts }) => {
             setBananaContract(bananaContractTemp);
 
             let bananaBalanceTemp = await bananaContractTemp.balanceOf(accounts[0]);
-            bananaBalanceTemp = bananaBalanceTemp.toString();
+            bananaBalanceTemp = ethers.utils.formatEther(bananaBalanceTemp);
             setBananaBalance(bananaBalanceTemp);
 
             let swapContractTemp = new ethers.Contract(tokenSwapAddress, TokenSwap.abi, provider.getSigner(accounts[0]));
@@ -42,76 +42,59 @@ const Main = ({ accounts }) => {
         }
     }, [accounts, bananaContract]);
 
-    async function buyTokens(etherAmount) {
-        let amount = ethers.utils.parseEther((etherAmount)).toString();
-        const response = await swapContract.buyTokens({ value: amount });
-        console.log(response);
+    let content;
+    if (currentForm === 'buy') {
+        content = <BuyForm
+            accountBalance={accountBalance}
+            bananaBalance={bananaBalance}
+            swapContract={swapContract}
+            input={input}
+            setInput={setInput}
+            setOutput={setOutput}
+            output={output}
+            tokenRate={tokenRate}
+        />
+    } else {
+        content = <SellForm
+            accountBalance={accountBalance}
+            bananaBalance={bananaBalance}
+            bananaContract={bananaContract}
+            swapContract={swapContract}
+            input={input}
+            setInput={setInput}
+            setOutput={setOutput}
+            output={output}
+            tokenRate={tokenRate}
+        />
     }
-
-
     return (
         <div>
             {accounts[0] ? (
-                <div id="content">
+                <div id="content" className="mt-3">
+
+                    <div className="d-flex justify-content-between mb-3">
+                        <button
+                            className="btn btn-light"
+                            onClick={() => {
+                                setCurrentForm('buy');
+                            }}
+                        >
+                            Buy
+                        </button>
+                        <span className="text-muted">&lt; &nbsp; &gt;</span>
+                        <button
+                            className="btn btn-light"
+                            onClick={() => {
+                                setCurrentForm('sell');
+                            }}
+                        >
+                            Sell
+                        </button>
+                    </div>
+
                     <div className="card mb-4">
                         <div className="card-body">
-                            <form className="mb-3" onSubmit={(event) => {
-                                event.preventDefault();
-                                buyTokens(input);
-                            }}>
-                                <div className="input-balance-container">
-                                    <label className="float-left"><b>Input</b></label>
-                                    <span className="float-right text-muted">
-                                        Balance: {accountBalance}
-                                    </span>
-                                </div>
-                                <div className="input-group mb-4">
-                                    <input
-                                        className="form-control form-control-lg"
-                                        onChange={(event) => {
-                                            const etherAmount = event.target.value;
-                                            setOutput(etherAmount * tokenRate);
-                                            setInput(etherAmount);
-                                        }}
-                                        type="text"
-                                        placeholder="0"
-                                        value={input}
-                                        required />
-                                    <div className="input-group-append">
-                                        <div className="input-group-text">
-                                            <img src={ethLogo} height='32' alt="" />
-                                            &nbsp;&nbsp;&nbsp; ETH
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="input-balance-container">
-                                    <label className="float-left"><b>Output</b></label>
-                                    <span className="float-right text-muted">
-                                        Balance: {bananaBalance}
-                                    </span>
-                                </div>
-                                <div className="input-group mb-2">
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-lg"
-                                        placeholder="0"
-                                        value={output}
-                                        disabled
-                                    />
-                                    <div className="input-group-append">
-                                        <div className="input-group-text">
-                                            <img src={bananaLogo} height='32' alt="" />
-                                            &nbsp; BANANA
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="input-balance-container mb-5">
-                                    <span className="float-left text-muted">Exchange Rate</span>
-                                    <span className="float-right text-muted">1 ETH = 100 BANANA</span>
-                                </div>
-                                <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
-                            </form>
+                            {content}
                         </div>
                     </div >
                 </div >

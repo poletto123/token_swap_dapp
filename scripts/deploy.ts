@@ -10,6 +10,9 @@ async function main() {
   const tokenSwap = await TokenSwap.deploy(bananaToken.address);
   await tokenSwap.deployed();
   console.log("TokenSwap address: ", tokenSwap.address);
+
+  const [deployer] = await ethers.getSigners();
+  await bananaToken.connect(deployer).transfer(tokenSwap.address, ethers.utils.parseEther("100"));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
