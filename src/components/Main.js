@@ -15,8 +15,8 @@ const Main = ({ accounts }) => {
     const [output, setOutput] = useState('');
     const [currentForm, setCurrentForm] = useState('buy');
 
-    const bananaTokenAddress = '0x809d550fca64d94Bd9F66E60752A544199cfAC3D';
-    const tokenSwapAddress = '0x4c5859f0F772848b2D91F1D83E2Fe57935348029';
+    const bananaTokenAddress = '0xfcafA643eF33b1C388bA3aACe31D2899943A311B';
+    const tokenSwapAddress = '0x4E6b04801c5890D8045B0D585f8AD6FD2a33C503';
     const tokenRate = 10;
 
     useEffect(() => {
