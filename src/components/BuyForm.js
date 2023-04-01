@@ -16,7 +16,6 @@ const BuyForm = ({
 
     async function buyTokens(etherAmount) {
         let amount = ethers.utils.parseEther((etherAmount)).toString();
-        console.log(amount);
         const response = await swapContract.buyTokens({ value: amount, gasLimit: 200000 });
         console.log(response);
     }

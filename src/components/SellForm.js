@@ -17,7 +17,6 @@ const SellForm = ({
 
     async function sellTokens(tokenAmount) {
         let amount = ethers.utils.parseEther((tokenAmount)).toString();
-        console.log(amount);
         await bananaContract.approve(swapContract.address, amount, { gasLimit: 200000 });
         const response = await swapContract.sellTokens(amount, { gasLimit: 200000 });
         console.log(response);
