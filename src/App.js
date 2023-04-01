@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import NavBar from './components/NavBar.js'
+import Main from './components/Main.js'
 
 function App() {
+  const [accounts, setAccounts] = useState([]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NavBar accounts={accounts} setAccounts={setAccounts} />
+      <div className="container-fluid mt-5 d-flex justify-content-center">
+        <div className="row">
+          <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
+            <div className="content mr-auto ml-auto">
+              <Main accounts={accounts} />
+
+            </div>
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
