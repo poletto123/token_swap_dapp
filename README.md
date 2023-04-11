@@ -13,7 +13,8 @@
     - BananaToken.sol - https://goerli.etherscan.io/address/0xfcafA643eF33b1C388bA3aACe31D2899943A311B
     - TokenSwap.sol - https://goerli.etherscan.io/address/0x4E6b04801c5890D8045B0D585f8AD6FD2a33C503
 
-- Front-end website made with ReactJS (Hooks, Components) and react-bootstrap
+- Front-end website made with ReactJS (Hooks, Components) and react-bootstrap. Currently deployed with Vercel:
+  - https://token-swap-dapp-jnm0vditk-poletto123.vercel.app/
 
 ### **HOW TO RUN**
 
